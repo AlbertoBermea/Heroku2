@@ -8,7 +8,7 @@ const app = express()
 
 const mapbax_token = process.env.MAPBOX_TOKEN || 'pk.eyJ1IjoiYWJlcm1lYSIsImEiOiJjazFpbHU3ZG0wNHBkM25xN2YxcHhvbDkzIn0.fdLNntVLgdoDuW5f6uSFsw'
 
-const weather_token ='9bb95c5190098c9e453124f291b905a9'
+const weather_token = process.env.DARK_SKY_SECRET_KEY || '9bb95c5190098c9e453124f291b905a9'
 
 app.get('/', function(req, res) {
     res.send({ 
@@ -16,7 +16,11 @@ app.get('/', function(req, res) {
     })
   })
 
-
+  app.get('*', function(req, res) {
+    res.send({
+      error: 'Ruta no valida'
+    })
+  })
 
 app.listen(port, function() {
   console.log('Up and running!')
