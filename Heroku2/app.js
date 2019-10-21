@@ -7,13 +7,25 @@ const request = require('request')
 
 const app = express()
 
-const mapbax_token = process.env.MAPBOX_TOKEN 
+mapbax_token = ""
+weather_token = ""
 
-const weather_token = process.env.DARK_SKY_SECRET_KEY 
+if ( process.env.NODE_ENV === 'production') {
+  mapbax_token = process.env.MAPBOX_TOKEN 
+
+  weather_token = process.env.DARK_SKY_SECRET_KEY 
+} else {
+  const credentials = require('./credentials.js')
+  mapbax_token = credentials.MAPBOX_TOKEN
+
+  weather_token = credentials.DARK_SKY_SECRET_KEY
+}
+
+
 
 app.get('/', function(req, res) {
     res.send({ 
-      greeting: mapbax_token
+      greeting: "Saludos Humano"
     })
   })
 
