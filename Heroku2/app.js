@@ -6,14 +6,46 @@ const express = require('express')
 
 const app = express()
 
-const mapbax_token = process.env.MAPBOX_TOKEN || 'pk.eyJ1IjoiYWJlcm1lYSIsImEiOiJjazFpbHU3ZG0wNHBkM25xN2YxcHhvbDkzIn0.fdLNntVLgdoDuW5f6uSFsw'
+const mapbax_token = process.env.MAPBOX_TOKEN 
 
-const weather_token = process.env.DARK_SKY_SECRET_KEY || '9bb95c5190098c9e453124f291b905a9'
+const weather_token = process.env.DARK_SKY_SECRET_KEY 
 
 app.get('/', function(req, res) {
     res.send({ 
       greeting: mapbax_token
     })
+  })
+
+  app.get('/weather', function(req, res) {
+
+    forwardGeoCode(req.query.search,function(data){  
+    
+        if(data.message){
+            res.send({
+                primer: data
+            })
+        }
+        else{
+            forecastWeather(data.lat,data.lon,function(data){
+    
+                if(data.error){
+                    res.send({
+                        error: data
+                    })
+                }
+                else{
+
+                    res.send({
+                        Ciudad: req.query.search,
+                        Sumaryy: data.summary,
+                        Temperatura: data.temp,
+                        Probabilidad_de_lluvia: data.probabilidad
+                    })
+                }
+            })
+        }
+    })
+
   })
 
   app.get('*', function(req, res) {
